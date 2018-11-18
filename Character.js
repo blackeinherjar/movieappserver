@@ -22,7 +22,8 @@ const schema = mongoose.Schema({
   aliases: { type: String },
   father: { type: String },
   mother: { type: String },
-  spouse: { type: String }
+  spouse: { type: String },
+  character_image: { type: String }
 });
 
 const Character = mongoose.model('Character', schema, 'character_list');
