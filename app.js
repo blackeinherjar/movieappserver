@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
 });
 
 //http://localhost:2000/addCharacter?name=Jon Snow
-app.get('/storeCharacter', (req, res) => {
+app.get('/addCharacter', (req, res) => {
   const name = req.query.name;
   const querystr = `https://www.anapioficeandfire.com/api/characters?name=${name}`;
 
