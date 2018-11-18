@@ -18,8 +18,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-//http://localhost:2000/storeCharacter?name=Jon Snow
-app.get('/addCharacter', (req, res) => {
+//http://localhost:2000/addCharacter?name=Jon Snow
+app.get('/storeCharacter', (req, res) => {
   const name = req.query.name;
   const querystr = `https://www.anapioficeandfire.com/api/characters?name=${name}`;
 
