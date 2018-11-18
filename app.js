@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const axios = require('axios');
-const Movie = require('./Movie');
+const Character = require('./Character');
 //const path = require('path'); //---heroku---
 const cors = require('cors');
 const apikey = '385e80';
@@ -18,27 +18,32 @@ app.use(function(req, res, next) {
   next();
 });
 
-//localhost:5000/getmovie?title=MovieTitle
-app.get('/getmovie', (req, res) => {
-  const title = req.query.title;
-  const querystr = `http://www.omdbapi.com/?t=${title}&apikey=${apikey}`;
+//http://localhost:2000/storeCharacter?name=Jon Snow
+app.get('/addCharacter', (req, res) => {
+  const name = req.query.name;
+  const querystr = `https://www.anapioficeandfire.com/api/characters?name=${name}`;
 
   axios
     .get(querystr)
     .then(response => {
-      const movie = new Movie({
-        title: response.data.Title,
-        year: response.data.Year,
-        genre: response.data.Genre,
-        actors: response.data.Actors,
-        plot: response.data.Plot,
-        poster: response.data.Poster
+      const character = new Character({
+        name: response.data[0].name,
+        gender: response.data[0].gender,
+        culture: response.data[0].culture,
+        born: response.data[0].born,
+        title: response.data[0].title,
+        aliases: response.data[0].aliases,
+        father: response.data[0].father,
+        mother: response.data[0].mother,
+        spouse: response.data[0].spouse
       });
-      if (!movie.title) {
+
+      // console.log(response.data[0].name);
+      if (!character.name) {
         res.status(200).json('Not found');
         return;
       }
-      movie
+      character
         .save()
         .then(response => {
           res.status(200).json(response);
@@ -52,9 +57,9 @@ app.get('/getmovie', (req, res) => {
     });
 });
 
-//localhost:5000/getallmovies
-app.get('/getallmovies', (req, res) => {
-  Movie.find({})
+//localhost:2000/getallcharacters
+app.get('/getallcharacters', (req, res) => {
+  Character.find({})
     .then(response => {
       res.status(200).send(response);
     })
@@ -63,9 +68,9 @@ app.get('/getallmovies', (req, res) => {
     });
 });
 
-//localhost:5000/deletemovie?title=MovieTitle
-app.get('/deletemovie', (req, res) => {
-  Movie.deleteMany({ title: req.query.title })
+//localhost:2000/deletecharacter?name=charactername
+app.get('/deletecharacter', (req, res) => {
+  Character.deleteMany({ name: req.query.name })
     .then(response => {
       res.status(200).json(response);
     })
